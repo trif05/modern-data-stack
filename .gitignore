@@ -1,0 +1,10 @@
+# env files and more
+.env
+
+# Local data Bronze/Silver
+data/
+
+# Python cache and logs
+__pycache__/
+logs/
+.DS_Store
