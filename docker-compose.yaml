@@ -11,11 +11,12 @@ x-airflow-common:
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    _PIP_ADD_REQUIREMENTS: "pandas requests"
+    _PIP_ADD_REQUIREMENTS: "pandas requests python-dotenv"
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
   user: "50000:0"
   depends_on:
     &airflow-common-depends-on
