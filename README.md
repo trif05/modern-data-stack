@@ -48,7 +48,7 @@ modern-data-stack/
 ├── LICENSE                         # Project license
 ├── README.md                       # Project documentation
 └── requirements.txt                # Python dependencies
-
+```
 ---
 ## Pipeline Execution Result
 
