@@ -1,1 +1,7 @@
-extract
+requests
+pandas
+pyarrow
+fastparquet
+sqlalchemy
+psycopg2-binary
+python-dotenv
