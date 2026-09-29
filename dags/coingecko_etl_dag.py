@@ -6,6 +6,15 @@ import os
 
 sys.path.append('/opt/airflow/scripts')
 from extract import fetch_crypto_data
+
+from extract import fetch_crypto_data
+from transform import transform_crypto_data # type: ignore
+from load import create_db_engine, load_silver_to_postgres # type: ignore
+
+def run_load_pipeline():
+    engine = create_db_engine()
+    load_silver_to_postgres(engine)
+
 # Dictionary of setting for the tasks
 default_args = {
     'owner': 'theodoros',
@@ -28,5 +37,13 @@ with DAG(
         task_id='extract_coingecko_api', # Name of the task
         python_callable=fetch_crypto_data, # Function that we are calling
     )
+    transform_task = PythonOperator(
+        task_id='transform_silver_layer',
+        python_callable=transform_crypto_data,
+    )
+    load_task = PythonOperator(
+        task_id='load_to_postgres',
+        python_callable=run_load_pipeline,
+    )
 
-    extract_task
+    extract_task >> transform_task >> load_task

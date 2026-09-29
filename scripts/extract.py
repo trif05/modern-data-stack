@@ -4,11 +4,17 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv()
+base_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(base_dir, "../.env")
+load_dotenv(dotenv_path=env_path)
 
 def fetch_crypto_data():
     url="https://api.coingecko.com/api/v3/coins/markets"
     api_key = os.getenv("COINGECKO_API_KEY")
+    if not api_key:
+        print("WARNING:COINGECKO_API_KEY NOT FOUND!")
+    else:
+        print("COINGECKO_API_KEY LOADED SUCCESFULLY.")
     params={
         "vs_currency" : "usd", # Reference currency.
         "order" : "market_cap_desc", # Shorting per capitalization.
@@ -19,7 +25,8 @@ def fetch_crypto_data():
     }
 
     headers={
-        "accept" : "application/json" # When reply give me JSON data.
+        "accept" : "application/json", # When reply give me JSON data.
+        "x-cg-demo-api-key": api_key
     }
 
     response = requests.get(url, params=params, headers=headers)
