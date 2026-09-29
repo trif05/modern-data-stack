@@ -6,10 +6,9 @@ import os
 
 sys.path.append('/opt/airflow/scripts')
 from extract import fetch_crypto_data
-
-from extract import fetch_crypto_data
 from transform import transform_crypto_data # type: ignore
 from load import create_db_engine, load_silver_to_postgres # type: ignore
+from quality_check import run_quality_checks # type: ignore
 
 def run_load_pipeline():
     engine = create_db_engine()
@@ -45,5 +44,9 @@ with DAG(
         task_id='load_to_postgres',
         python_callable=run_load_pipeline,
     )
+    quality_check_task = PythonOperator(
+        task_id='data_quality_check',
+        python_callable=run_quality_checks,
+    )
 
-    extract_task >> transform_task >> load_task
+    extract_task >> transform_task >> load_task >> quality_check_task
